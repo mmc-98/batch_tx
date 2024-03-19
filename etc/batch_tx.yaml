@@ -1,5 +1,4 @@
-
-
+Name: batch_tx
 # eth配置
 Eth:
   Url: /root/.x1/x1.ipc
