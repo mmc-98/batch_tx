@@ -7,4 +7,5 @@ batch_tx
 *.bak
 logs/
 tests/
+etc/batch_tx.yaml.bak
 etc/batch_tx.yaml.dev

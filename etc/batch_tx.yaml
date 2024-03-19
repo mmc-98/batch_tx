@@ -1,0 +1,9 @@
+
+
+# eth配置
+Eth:
+  Url: /root/.x1/x1.ipc
+  Key: ""
+  Num: 100
+  ChainID: 204005
+  ToAddr: 0xCbae58ec6C5e27fA380bEa174270FaCb4a72F6C7
