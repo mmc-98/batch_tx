@@ -10,3 +10,4 @@ tests/
 etc/batch_tx.default.yaml
 etc/batch_tx.dev.yaml
 build/*
+.idea/*
