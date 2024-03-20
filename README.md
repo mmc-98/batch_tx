@@ -35,15 +35,10 @@ make start.generate
 ```shell
 make start.send
 ```
-
-3.开启测试
-```shell
-make start.tx
-```
-
+ 
 
 ## 3.运行
 ```shell
-./batch_tx
+start.tx
 ```
  
