@@ -24,6 +24,7 @@ type Config struct {
 		Num     int
 		ChainID int
 		ToAddr  string
+		Value   string
 	}
 	// Vault struct {
 	// 	Address *vault.Config
