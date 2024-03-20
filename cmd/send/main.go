@@ -18,7 +18,6 @@ import (
 	"github.com/okx/go-wallet-sdk/example"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/core/mr"
 )
 
 type ServiceContext struct {
@@ -32,9 +31,6 @@ type ServiceContext struct {
 }
 
 func (s *ServiceContext) SetAddrKeyAndAddrList() {
-	var (
-		funcs []func() error
-	)
 
 	for i := 0; i < s.Config.Eth.Num; i++ {
 		hdPath := example.GetDerivedPath(i)
@@ -47,18 +43,10 @@ func (s *ServiceContext) SetAddrKeyAndAddrList() {
 		}
 
 		privateKey, err := crypto.ToECDSA(privateKeyByte)
+		logx.Infof("addr: %v", address)
 
-		funcs = append(funcs, func() error {
-			s.Lock.Lock()
-			defer s.Lock.Unlock()
-			s.AddressKey[common.HexToAddress(address)] = privateKey
-			s.AddrList = append(s.AddrList, common.HexToAddress(address))
-			return nil
-		})
-	}
-	err := mr.Finish(funcs...)
-	if err != nil {
-		logx.Errorf("client.Call err:%v", err)
+		s.AddressKey[common.HexToAddress(address)] = privateKey
+		s.AddrList = append(s.AddrList, common.HexToAddress(address))
 	}
 
 }
