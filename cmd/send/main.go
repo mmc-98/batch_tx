@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"math/big"
+	"os"
 	"sync"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -113,7 +114,7 @@ func (s *ServiceContext) SendEthtoAll() {
 		err := s.W3Cli.Call(eth.SendTx(tx).Returns(&txHash))
 		if err != nil {
 			logx.Errorf("err:%v fromAddr:%v toAddr:%v", err, fromAddr, toAddr)
-			panic(err)
+			os.Exit(-1)
 		}
 		s.FromNocesMap[fromAddr]++
 		logx.Infof("fromAddr:%v toAddr:%v noce:%v value: %v", fromAddr, toAddr, noce, s.Config.Eth.Value)
