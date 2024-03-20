@@ -43,7 +43,7 @@ func (s *ServiceContext) SetAddrKeyAndAddrList() {
 		}
 
 		privateKey, err := crypto.ToECDSA(privateKeyByte)
-		logx.Infof("addr: %v", address)
+		// logx.Infof("addr: %v", address)
 
 		s.AddressKey[common.HexToAddress(address)] = privateKey
 		s.AddrList = append(s.AddrList, common.HexToAddress(address))
