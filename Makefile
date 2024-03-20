@@ -45,6 +45,7 @@ build.config:
 .PHONY: all
 # generate all
 all:
+	go mod tidy
 	make build.config
 	make build.generate;
 	make build.send;
