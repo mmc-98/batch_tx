@@ -39,6 +39,6 @@ make start.send
 
 ## 3.运行
 ```shell
-start.tx
+make start.tx
 ```
  
