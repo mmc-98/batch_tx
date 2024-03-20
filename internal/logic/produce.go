@@ -84,7 +84,7 @@ func (l *Producer) QueryFreeGasAndTipGas() error {
 
 	return l.svcCtx.W3Cli.Call(
 		eth.GasPrice().Returns(&l.FreeGas),
-		eth.GasTipCap().Returns(&l.TipGas),
+		// eth.GasTipCap().Returns(&l.TipGas),
 	)
 
 }
