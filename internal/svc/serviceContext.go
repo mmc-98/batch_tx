@@ -16,29 +16,21 @@ import (
 )
 
 type ServiceContext struct {
-	Config config.Config
-	// Consumer   dq.Consumer
+	Config     config.Config
 	W3Cli      *w3.Client
 	Lock       sync.RWMutex
 	AddressKey map[common.Address]*ecdsa.PrivateKey
 	AddrList   []common.Address
-	// VaultCli *vault.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	// VaultCli, err := vault.NewClient(c.Vault.Address)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// VaultCli.SetToken(c.Vault.Token)
+
 	s := &ServiceContext{
-		Config: c,
-		// Consumer:   dq.NewConsumer(c.DqConf),
+		Config:     c,
 		W3Cli:      w3.MustDial(c.Eth.Url),
 		Lock:       sync.RWMutex{},
 		AddressKey: make(map[common.Address]*ecdsa.PrivateKey),
 		AddrList:   make([]common.Address, 0),
-		// VaultCli: VaultCli,
 	}
 	s.SetAddrKeyAndAddrList()
 	return s

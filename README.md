@@ -17,14 +17,14 @@ make start.generate
 ```
 
 2.2 修改测试私钥
-``` 
+
 把2.1步骤生成的私钥(mnemonic)添加到etc/batch_tx.yaml中的key字段
 其中字段解释:
   Url: /root/.x1/x1.ipc  # rpc地址(如你没有验证节点可以修改为官方的rpc地址:https://x1-devnet.xen.network)
   Key: ""                # 助记词
   Num: 100               # 并发数
   Value: "1 eth"         # 单个账号xn数量
-```
+
 2.3 通过小狐狸浏览器转账对量数量xn到主地址
 ```
 转帐对应的xn到2.1步骤生成的主地址(master address)
