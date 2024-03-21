@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -107,6 +108,7 @@ func (s *ServiceContext) SendEthtoAll() {
 		s.FromNocesMap[fromAddr]++
 		logx.Infof("fromAddr:%v toAddr:%v noce:%v value: %v", fromAddr, toAddr, noce, s.Config.Eth.Value)
 	}
+	time.Sleep(1 * time.Second)
 
 }
 
