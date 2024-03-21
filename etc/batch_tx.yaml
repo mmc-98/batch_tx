@@ -7,3 +7,4 @@ Eth:
   ChainID: 204005
   ToAddr: 0xCbae58ec6C5e27fA380bEa174270FaCb4a72F6C7
   Value: "1 eth"         # 单个账号xn数量
+  Time: 1000             # 间隔时间(单位毫秒)

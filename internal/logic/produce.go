@@ -225,7 +225,7 @@ func (l *Producer) Start() {
 			continue
 		}
 
-		time.Sleep(1000 * time.Millisecond)
+		time.Sleep(time.Duration(l.svcCtx.Config.Eth.Time) * time.Millisecond)
 	}
 
 }
