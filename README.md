@@ -28,22 +28,14 @@ make start.generate
 #master address: 0x43cb784b6027948830062b336064432036a0e7a6
 ```
 
-2.2 修改测试私钥
-``` 
-把2.1步骤生成的私钥(mnemonic)添加到build/etc/batch_tx.yaml中的key字段
-其中字段解释:
-  Url: /root/.x1/x1.ipc  # rpc地址(如你没有验证节点可以修改为官方的rpc地址:https://x1-devnet.xen.network)
-  Key: ""                # 助记词
-  Num: 100               # 并发数
-  Value: "1 eth"         # 单个账号xn数量
-```
-2.3 通过小狐狸浏览器转账对量数量xn到主地址
+ 
+2.2 通过小狐狸浏览器转账对量数量xn到主地址
 ```
 转帐对应的xn到2.1步骤生成的主地址(master address)
 列子: 转帐xn到主地址0x43cb784b6027948830062b336064432036a0e7a6,总量为num*vaule(100*1+1)总共101个
 
 ```
-2.4 分发测试代币到其他账号
+2.3 分发测试代币到其他账号
 ```shell
 make start.send
 ```
@@ -54,3 +46,12 @@ make start.send
 make start.tx
 ```
  
+## 附录
+```shell
+配置文件路径build/etc/batch_tx.yaml字段解释如下:
+  Url: /root/.x1/x1.ipc  # rpc地址(如你没有验证节点可以修改为官方的rpc地址:https://x1-devnet.xen.network)
+  Key: ""                # 助记词
+  Num: 100               # 并发数
+  Value: "1 eth"         # 单个账号xn数量
+  Time: 1000             # 间隔时间(单位毫秒)
+```
