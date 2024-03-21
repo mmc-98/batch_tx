@@ -107,8 +107,9 @@ func (s *ServiceContext) SendEthtoAll() {
 		}
 		s.FromNocesMap[fromAddr]++
 		logx.Infof("fromAddr:%v toAddr:%v noce:%v value: %v", fromAddr, toAddr, noce, s.Config.Eth.Value)
+
+		time.Sleep(1 * time.Second)
 	}
-	time.Sleep(1 * time.Second)
 
 }
 
