@@ -110,7 +110,7 @@ func (s *ServiceContext) SendEthtoAll() {
 
 }
 
-var configFile = flag.String("f", "etc/batch_tx.yaml", "the config file")
+var configFile = flag.String("f", "build/etc/batch_tx.yaml", "the config file")
 
 func main() {
 	flag.Parse()
