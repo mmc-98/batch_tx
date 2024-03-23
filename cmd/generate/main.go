@@ -49,18 +49,14 @@ func (l *ServiceContext) generateConf(tpl string, dst string, data any) error {
 	return t.Execute(file, data)
 }
 
-func (l *ServiceContext) generateMnemonicAndMasterAddr() (string, string, error) {
+func (l *ServiceContext) generateMnemonicAndMasterAddr() (string, error) {
 	mnemonic, err := example.GenerateMnemonic()
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 	// fmt.Printf("mnemonic: %v\n", mnemonic)
-	hdPath := example.GetDerivedPath(0)
-	derivePrivateKey, err := example.GetDerivedPrivateKey(mnemonic, hdPath)
 
-	// get new address
-	newAddress := example.GetNewAddress(derivePrivateKey)
-	return mnemonic, newAddress, nil
+	return mnemonic, nil
 	// fmt.Printf("master address: %v\n", newAddress)
 }
 
@@ -81,10 +77,18 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 	s := NewServiceContext(c)
 
-	mnemonic, masterAddr, err := s.generateMnemonicAndMasterAddr()
-	if err != nil {
-		logx.Errorf("生成错误")
-		return
+	var (
+		mnemonic string
+		err      error
+	)
+	if c.Eth.Key != "" {
+		mnemonic = c.Eth.Key
+	} else {
+		mnemonic, err = s.generateMnemonicAndMasterAddr()
+		if err != nil {
+			logx.Errorf("生成错误")
+			return
+		}
 	}
 
 	err = s.generateConf(*tplFile, *configFile, &mnemonicData{
@@ -95,5 +99,9 @@ func main() {
 		return
 	}
 
-	fmt.Printf("mnemonic: %v \n master address: %v \n", mnemonic, masterAddr)
+	hdPath := example.GetDerivedPath(0)
+	derivePrivateKey, err := example.GetDerivedPrivateKey(mnemonic, hdPath)
+	newAddress := example.GetNewAddress(derivePrivateKey)
+
+	fmt.Printf("mnemonic: %v \n master address: %v \n", mnemonic, newAddress)
 }
