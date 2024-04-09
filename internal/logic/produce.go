@@ -39,7 +39,7 @@ func NewProducerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Producer
 		svcCtx:    svcCtx,
 		Logger:    logx.WithContext(ctx),
 		addrNonce: make(map[common.Address]uint64),
-		// OkAddrList: make([]common.Address, 0),
+		OkAddrList: make([]common.Address, 0),
 		FreeGas:       *big.NewInt(0),
 		TipGas:        *w3.I("11 gwei"),
 		addrNonceList: make([]*addrNonce, 0),
