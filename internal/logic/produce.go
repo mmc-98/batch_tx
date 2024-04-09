@@ -35,11 +35,11 @@ type Producer struct {
 
 func NewProducerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Producer {
 	return &Producer{
-		ctx:       ctx,
-		svcCtx:    svcCtx,
-		Logger:    logx.WithContext(ctx),
-		addrNonce: make(map[common.Address]uint64),
-		OkAddrList: make([]common.Address, 0),
+		ctx:           ctx,
+		svcCtx:        svcCtx,
+		Logger:        logx.WithContext(ctx),
+		addrNonce:     make(map[common.Address]uint64),
+		OkAddrList:    make([]common.Address, 0),
 		FreeGas:       *big.NewInt(0),
 		TipGas:        *w3.I("11 gwei"),
 		addrNonceList: make([]*addrNonce, 0),
@@ -73,7 +73,7 @@ func (l *Producer) CheckAddressBalance() error {
 
 	for _, item := range res {
 		if item.Val.Cmp(big.NewInt(0)) < 1 {
-			return errors.New(fmt.Sprintf("%v 余额小于1请充值", item.Addr.String()))
+			return errors.New(fmt.Sprintf("%v Balance less than 1, please recharge.余额小于1请充值", item.Addr.String()))
 		}
 	}
 
@@ -84,7 +84,7 @@ func (l *Producer) QueryFreeGasAndTipGas() error {
 
 	return l.svcCtx.W3Cli.Call(
 		eth.GasPrice().Returns(&l.FreeGas),
-		// eth.GasTipCap().Returns(&l.TipGas),
+		eth.GasTipCap().Returns(&l.TipGas),
 	)
 
 }
