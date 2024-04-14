@@ -22,5 +22,5 @@ func NewXenContractModel() *XenContractModel {
 
 func (l XenContractModel) EncodeArgs() ([]byte, error) {
 	logx.Infof("xen...")
-	return w3.MustNewFunc(l.signature, l.returns).EncodeArgs(big.NewInt(10), big.NewInt(1))
+	return w3.MustNewFunc(l.signature, l.returns).EncodeArgs(big.NewInt(43), big.NewInt(1))
 }
