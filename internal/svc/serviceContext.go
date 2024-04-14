@@ -2,6 +2,7 @@ package svc
 
 import (
 	"batch_tx/internal/config"
+	"batch_tx/internal/model"
 	"crypto/ecdsa"
 	"fmt"
 	"sync"
@@ -16,21 +17,23 @@ import (
 )
 
 type ServiceContext struct {
-	Config     config.Config
-	W3Cli      *w3.Client
-	Lock       sync.RWMutex
-	AddressKey map[common.Address]*ecdsa.PrivateKey
-	AddrList   []common.Address
+	Config        config.Config
+	W3Cli         *w3.Client
+	Lock          sync.RWMutex
+	AddressKey    map[common.Address]*ecdsa.PrivateKey
+	AddrList      []common.Address
+	ContractModel model.ContractModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 
 	s := &ServiceContext{
-		Config:     c,
-		W3Cli:      w3.MustDial(c.Eth.Url),
-		Lock:       sync.RWMutex{},
-		AddressKey: make(map[common.Address]*ecdsa.PrivateKey),
-		AddrList:   make([]common.Address, 0),
+		Config:        c,
+		W3Cli:         w3.MustDial(c.Eth.Url),
+		Lock:          sync.RWMutex{},
+		AddressKey:    make(map[common.Address]*ecdsa.PrivateKey),
+		AddrList:      make([]common.Address, 0),
+		ContractModel: model.NewBaseContractModel(),
 	}
 	s.SetAddrKeyAndAddrList()
 	return s

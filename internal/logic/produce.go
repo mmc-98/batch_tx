@@ -1,12 +1,14 @@
 package logic
 
 import (
+	"batch_tx/internal/model"
 	"batch_tx/internal/svc"
 	"context"
 	"errors"
 	"fmt"
 	"math/big"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -31,6 +33,7 @@ type Producer struct {
 	OkAddrList      []common.Address
 	FreeGas, TipGas big.Int
 	addrNonceList   []*addrNonce
+	all             int
 }
 
 func NewProducerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Producer {
@@ -43,6 +46,7 @@ func NewProducerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Producer
 		FreeGas:       *big.NewInt(0),
 		TipGas:        *w3.I("11 gwei"),
 		addrNonceList: make([]*addrNonce, 0),
+		all:           0,
 	}
 }
 
@@ -146,6 +150,12 @@ func (l *Producer) BatchListNoceByAddr() error {
 }
 
 func (l *Producer) SendTxByAddrList() error {
+	var s model.ContractModel
+	so := sync.Once{}
+	so.Do(func() {
+		s = l.GetInputByContractName()
+	})
+
 	var (
 		calls  = make([]w3types.RPCCaller, 0)
 		oks    = 0
@@ -157,6 +167,10 @@ func (l *Producer) SendTxByAddrList() error {
 	tipGasInt := l.TipGas
 	freeGasInt = big.NewInt(0).Add(freeGasInt, &tipGasInt)
 
+	input, err := s.EncodeArgs()
+	if err != nil {
+		logx.Errorf("err :%v", err)
+	}
 	for index, addr := range l.OkAddrList {
 		fromAddress := addr
 		Nonce := l.addrNonceList[index].nonce
@@ -166,9 +180,10 @@ func (l *Producer) SendTxByAddrList() error {
 			Nonce:     Nonce,
 			GasTipCap: &tipGasInt,
 			GasFeeCap: freeGasInt,
-			Gas:       21000,
+			Gas:       2100000,
 			To:        &toAddr,
-			Value:     w3.I("0.0000001 ether"),
+			Value:     w3.I("0"),
+			Data:      input,
 		})
 		calls = append(calls, eth.SendTx(tx).Returns(&txHash))
 
@@ -176,6 +191,7 @@ func (l *Producer) SendTxByAddrList() error {
 
 	errs := l.svcCtx.W3Cli.Call(calls...)
 	if errs != nil {
+		logx.Infof("err:%v", errs)
 		for _, err := range errs.(w3.CallErrors) {
 			logx.Infof("err:%v", err)
 			if err != nil {
@@ -185,10 +201,26 @@ func (l *Producer) SendTxByAddrList() error {
 
 	}
 	oks = len(l.OkAddrList)
-
-	logx.Infof(" ok: %v err:%v   t=%v", oks, nooks, time.Since(t))
+	l.all += oks
+	logx.Infof(" ok: %v err:%v   t=%v all:%v", oks, nooks, time.Since(t), l.all)
 
 	return nil
+}
+
+func (l *Producer) GetInputByContractName() model.ContractModel {
+	var s model.ContractModel
+	switch l.svcCtx.Config.Eth.ToAddr {
+	case "0x4A7766a5BD50DFAB5665d27eDfA25471b194E204": // xenft
+		s = model.NewXenContractModel()
+	case "swap":
+		s = model.NewSwapContractModel()
+
+	default:
+		// 默认是转账tx
+		s = model.NewTxContractModel()
+	}
+
+	return s
 }
 
 func (l *Producer) Start() {
