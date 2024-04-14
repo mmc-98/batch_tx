@@ -180,7 +180,7 @@ func (l *Producer) SendTxByAddrList() error {
 			Nonce:     Nonce,
 			GasTipCap: &tipGasInt,
 			GasFeeCap: freeGasInt,
-			Gas:       9068000,
+			Gas:       2500000,
 			To:        &toAddr,
 			Value:     w3.I("0"),
 			Data:      input,
